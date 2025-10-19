@@ -17,7 +17,7 @@ const Header = ({ username }: HeaderProps) => {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-xl">
       <div className="container mx-auto max-w-7xl px-3 md:px-4 h-14 md:h-16 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <Sparkles className="w-5 md:w-6 h-5 md:h-6 text-foreground shrink-0" />

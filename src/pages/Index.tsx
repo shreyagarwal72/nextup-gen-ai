@@ -9,7 +9,7 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState<string>("");
 
-  const handleGenerate = async (theme: string, tone: string, platform: string): Promise<string> => {
+  const handleGenerate = async (theme: string, tone: string, contentType: string): Promise<string> => {
     setIsLoading(true);
     try {
       const response = await fetch(
@@ -20,7 +20,7 @@ const Index = () => {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
-          body: JSON.stringify({ theme, tone, platform }),
+          body: JSON.stringify({ theme, tone, contentType }),
         }
       );
 
@@ -42,9 +42,12 @@ const Index = () => {
 
       const data = await response.json();
       
-      // Format response as markdown
-      const formattedResponse = `
-## 📝 Video Script
+      // Format response based on content type
+      let formattedResponse = "";
+      
+      if (contentType === "all") {
+        formattedResponse = `
+## 📝 Script
 
 ${data.script}
 
@@ -78,6 +81,19 @@ ${data.hashtags.join(" ")}
 
 ${data.thumbnailIdea}
 `;
+      } else if (contentType === "title") {
+        formattedResponse = `## ✨ Title\n\n**${data.title}**`;
+      } else if (contentType === "description") {
+        formattedResponse = `## 📄 Description\n\n${data.description}`;
+      } else if (contentType === "tags") {
+        formattedResponse = `## 🏷️ Tags\n\n${data.tags.map((tag: string) => `\`${tag}\``).join(", ")}`;
+      } else if (contentType === "hashtags") {
+        formattedResponse = `## #️⃣ Hashtags\n\n${data.hashtags.join(" ")}`;
+      } else if (contentType === "thumbnail") {
+        formattedResponse = `## 🖼️ Thumbnail Idea\n\n${data.thumbnailIdea}`;
+      } else if (contentType === "script") {
+        formattedResponse = `## 📝 Script\n\n${data.script}`;
+      }
       
       toast.success("Content generated successfully!");
       return formattedResponse;
@@ -91,12 +107,12 @@ ${data.thumbnailIdea}
   };
 
   return (
-    <div className="min-h-screen flex flex-col animated-bg">
+    <div className="min-h-screen flex flex-col animated-bg overflow-hidden">
       <UsernameModal onUsernameSet={setUsername} />
       <CookieConsent />
       <Header username={username} />
       
-      <main className="flex-1 container mx-auto max-w-7xl">
+      <main className="flex-1 container mx-auto max-w-7xl h-[calc(100vh-60px)] md:h-[calc(100vh-80px)] overflow-hidden">
         <ChatInterface onGenerate={handleGenerate} isLoading={isLoading} />
       </main>
 

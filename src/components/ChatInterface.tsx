@@ -13,7 +13,7 @@ interface Message {
 }
 
 interface ChatInterfaceProps {
-  onGenerate: (theme: string, tone: string, platform: string) => Promise<string>;
+  onGenerate: (theme: string, tone: string, contentType: string) => Promise<string>;
   isLoading: boolean;
 }
 
@@ -21,7 +21,7 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [theme, setTheme] = useState("");
   const [tone, setTone] = useState("funny");
-  const [platform, setPlatform] = useState("YouTube");
+  const [contentType, setContentType] = useState("all");
   const [showOptions, setShowOptions] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -52,7 +52,7 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
       textareaRef.current.style.height = "auto";
     }
 
-    const response = await onGenerate(theme, tone, platform);
+    const response = await onGenerate(theme, tone, contentType);
     
     if (response) {
       const assistantMessage: Message = {
@@ -80,9 +80,9 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-80px)] md:h-[calc(100vh-140px)]">
+    <div className="flex flex-col h-full">
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto px-3 md:px-4 py-4 md:py-6 space-y-4 md:space-y-6">
+      <div className="flex-1 overflow-y-auto px-3 md:px-4 py-4 md:py-6 space-y-4 md:space-y-6 pb-32 md:pb-40">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center space-y-6 max-w-2xl animate-fade-in">
@@ -134,7 +134,7 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
       </div>
 
       {/* Fixed Input Area */}
-      <div className="border-t border-border bg-background/80 backdrop-blur-xl">
+      <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-background/95 backdrop-blur-xl z-50">
         <div className="container mx-auto max-w-4xl px-3 md:px-4 py-3 md:py-4">
           {/* Options Bar */}
           <div className={cn(
@@ -160,20 +160,18 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
                 </SelectContent>
               </Select>
 
-              <Select value={platform} onValueChange={setPlatform} disabled={isLoading}>
+              <Select value={contentType} onValueChange={setContentType} disabled={isLoading}>
                 <SelectTrigger className="w-[130px] md:w-[140px] h-8 md:h-9 text-xs md:text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="YouTube">📺 YouTube</SelectItem>
-                  <SelectItem value="Shorts">🎥 Shorts</SelectItem>
-                  <SelectItem value="Instagram">📸 Instagram</SelectItem>
-                  <SelectItem value="TikTok">🎵 TikTok</SelectItem>
-                  <SelectItem value="Facebook">👥 Facebook</SelectItem>
-                  <SelectItem value="Twitter">🐦 Twitter/X</SelectItem>
-                  <SelectItem value="LinkedIn">💼 LinkedIn</SelectItem>
-                  <SelectItem value="Pinterest">📌 Pinterest</SelectItem>
-                  <SelectItem value="Blog">📝 Blog</SelectItem>
+                  <SelectItem value="all">📦 All</SelectItem>
+                  <SelectItem value="title">✨ Title</SelectItem>
+                  <SelectItem value="description">📄 Description</SelectItem>
+                  <SelectItem value="tags">🏷️ Tags</SelectItem>
+                  <SelectItem value="hashtags">#️⃣ Hashtags</SelectItem>
+                  <SelectItem value="thumbnail">🖼️ Thumbnail Idea</SelectItem>
+                  <SelectItem value="script">📝 Script</SelectItem>
                 </SelectContent>
               </Select>
 

@@ -11,7 +11,7 @@ serve(async (req) => {
   }
 
   try {
-    const { theme, tone, platform } = await req.json();
+    const { theme, tone, contentType } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
     if (!LOVABLE_API_KEY) {
@@ -53,9 +53,10 @@ FLEXIBILITY:
     const userPrompt = `Generate content for:
 Theme/Idea: ${theme}
 Tone: ${tone}
-Platform: ${platform}
+Content Type: ${contentType}
 
-Provide complete, ready-to-use content.`;
+${contentType !== "all" ? `Focus on generating an exceptional ${contentType} that stands out. Make it professional, engaging, and optimized.` : "Provide complete, ready-to-use content with all elements."}`;
+
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
