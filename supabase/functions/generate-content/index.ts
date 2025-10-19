@@ -22,19 +22,26 @@ serve(async (req) => {
 
 Your response MUST be a valid JSON object with this exact structure:
 {
-  "script": "A detailed, engaging script (2-3 paragraphs for shorts, 4-5 for full videos)",
+  "script": "A detailed, engaging script (2-3 paragraphs for shorts, 4-5 for full videos). Use **bold** for emphasis on key points, actions, or important phrases.",
   "title": "A catchy, SEO-friendly title under 60 characters",
-  "description": "A compelling description with hooks and CTAs (150-200 words)",
+  "description": "A compelling description with hooks and CTAs (150-200 words). Use **bold** for key selling points and important information.",
   "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
   "hashtags": ["#hashtag1", "#hashtag2", "#hashtag3"],
-  "thumbnailIdea": "A vivid description of a thumbnail concept"
+  "thumbnailIdea": "A vivid description of a thumbnail concept with **bold** text for key visual elements"
 }
 
+IMPORTANT FORMATTING RULES:
+- Use **text** for bold/emphasis (important phrases, key actions, highlights)
+- Use *text* for subtle emphasis or italics
+- Keep formatting natural and professional
+- Bold should enhance readability, not overwhelm
+
 Make the content:
-- Engaging and platform-optimized
-- Natural and authentic
+- Engaging and platform-optimized with strategic bold text
+- Natural and authentic with clear emphasis
 - SEO-friendly with relevant keywords
-- Tailored to the specified tone and platform`;
+- Tailored to the specified tone and platform
+- Well-formatted with markdown styling`;
 
     const userPrompt = `Generate content for:
 Theme/Idea: ${theme}
