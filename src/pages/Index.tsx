@@ -2,7 +2,6 @@ import { useState } from "react";
 import { toast } from "sonner";
 import Header from "@/components/Header";
 import ChatInterface from "@/components/ChatInterface";
-import AboutSection from "@/components/AboutSection";
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -40,7 +39,7 @@ const Index = () => {
 
       const data = await response.json();
       
-      // Format the response as markdown with proper formatting
+      // Format response as markdown
       const formattedResponse = `
 ## 📝 Video Script
 
@@ -75,10 +74,6 @@ ${data.hashtags.join(" ")}
 ## 🖼️ Thumbnail Idea
 
 ${data.thumbnailIdea}
-
----
-
-*💡 Tip: Click the copy button to copy any section, or use the sections above to craft your content!*
 `;
       
       toast.success("Content generated successfully!");
@@ -93,41 +88,20 @@ ${data.thumbnailIdea}
   };
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
-      {/* Background effects */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse-glow" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: "1s" }} />
-      </div>
+    <div className="min-h-screen flex flex-col animated-bg">
+      <Header />
+      
+      <main className="flex-1 container mx-auto max-w-7xl">
+        <ChatInterface onGenerate={handleGenerate} isLoading={isLoading} />
+      </main>
 
-      <div className="relative z-10 flex flex-col min-h-screen">
-        <Header />
-        
-        <main className="flex-1 container mx-auto px-4 py-8">
-          <div className="text-center mb-8 animate-fade-in">
-            <h2 className="text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-              AI-Powered Creative Studio
-            </h2>
-            <p className="text-base text-muted-foreground max-w-2xl mx-auto">
-              Professional content generation powered by Gemini AI. Get scripts, titles, and more in seconds.
-            </p>
-          </div>
-
-          <ChatInterface onGenerate={handleGenerate} isLoading={isLoading} />
-          
-          <div className="mt-16">
-            <AboutSection />
-          </div>
-        </main>
-
-        <footer className="w-full py-6 px-4 border-t border-border/30 backdrop-blur-xl">
-          <div className="container mx-auto max-w-6xl text-center">
-            <p className="text-sm text-muted-foreground">
-              © 2025 Nextup Studio — Powered by Gemini AI
-            </p>
-          </div>
-        </footer>
-      </div>
+      <footer className="py-3 px-4 border-t border-border bg-background/50 backdrop-blur-xl">
+        <div className="container mx-auto max-w-7xl text-center">
+          <p className="text-xs text-muted-foreground">
+            © 2025 Nextup Studio — Created by Vanshu
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };

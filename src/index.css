@@ -8,51 +8,73 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 240 10% 6%;
-    --foreground: 180 100% 90%;
-
-    --card: 240 8% 10%;
-    --card-foreground: 180 100% 95%;
-
-    --popover: 240 8% 12%;
-    --popover-foreground: 180 100% 95%;
-
-    --primary: 187 100% 42%;
-    --primary-foreground: 240 10% 6%;
-
-    --secondary: 240 6% 16%;
-    --secondary-foreground: 180 100% 95%;
-
-    --muted: 240 6% 20%;
-    --muted-foreground: 180 30% 70%;
-
-    --accent: 187 100% 42%;
-    --accent-foreground: 240 10% 6%;
-
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 240 6% 20%;
-    --input: 240 6% 18%;
-    --ring: 187 100% 42%;
-
-    --radius: 1rem;
-
-    /* Custom gradient tokens */
-    --gradient-primary: linear-gradient(135deg, hsl(187 100% 42%) 0%, hsl(200 100% 50%) 100%);
-    --gradient-card: linear-gradient(135deg, hsl(240 8% 10% / 0.6) 0%, hsl(240 8% 12% / 0.4) 100%);
-    --gradient-glow: radial-gradient(circle at center, hsl(187 100% 42% / 0.1) 0%, transparent 70%);
+    --destructive-foreground: 0 0% 98%;
     
-    /* Glass effect */
-    --glass-bg: hsl(240 8% 10% / 0.4);
-    --glass-border: hsl(180 100% 90% / 0.1);
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
     
-    /* Shadows */
-    --shadow-glow: 0 0 40px hsl(187 100% 42% / 0.3);
-    --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.4);
+    --radius: 0.75rem;
     
-    /* Transitions */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Custom tokens */
+    --gradient-bg: linear-gradient(135deg, hsl(240 6% 97%) 0%, hsl(240 5% 94%) 100%);
+    --shadow-card: 0 2px 8px hsl(240 6% 10% / 0.08);
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    
+    --card: 240 8% 8%;
+    --card-foreground: 0 0% 98%;
+    
+    --popover: 240 8% 8%;
+    --popover-foreground: 0 0% 98%;
+    
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    
+    /* Custom tokens */
+    --gradient-bg: linear-gradient(135deg, hsl(240 8% 5%) 0%, hsl(240 10% 7%) 100%);
+    --shadow-card: 0 4px 16px hsl(0 0% 0% / 0.3);
   }
 }
 
@@ -63,5 +85,39 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+  
+  /* Animated background */
+  .animated-bg {
+    background: linear-gradient(135deg, 
+      hsl(var(--background)) 0%, 
+      hsl(var(--muted) / 0.3) 50%, 
+      hsl(var(--background)) 100%);
+    background-size: 400% 400%;
+    animation: gradient-shift 15s ease infinite;
+  }
+  
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted));
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
   }
 }

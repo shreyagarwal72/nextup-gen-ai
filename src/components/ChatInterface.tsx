@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Send, RotateCcw } from "lucide-react";
+import { Loader2, Send, RotateCcw, Settings2, Sparkles } from "lucide-react";
 import ChatMessage from "./ChatMessage";
+import { cn } from "@/lib/utils";
 
 interface Message {
   role: "user" | "assistant";
@@ -21,6 +22,17 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
   const [theme, setTheme] = useState("");
   const [tone, setTone] = useState("funny");
   const [platform, setPlatform] = useState("YouTube");
+  const [showOptions, setShowOptions] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,12 +40,17 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
 
     const userMessage: Message = {
       role: "user",
-      content: `Generate content for: **${theme}**\n\n- Tone: ${tone}\n- Platform: ${platform}`,
+      content: theme,
       timestamp: new Date(),
     };
 
     setMessages((prev) => [...prev, userMessage]);
     setTheme("");
+    
+    // Reset textarea height
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
 
     const response = await onGenerate(theme, tone, platform);
     
@@ -50,23 +67,47 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
   const handleReset = () => {
     setMessages([]);
     setTheme("");
+    setShowOptions(false);
+  };
+
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTheme(e.target.value);
+    
+    // Auto-resize textarea
+    const textarea = e.target;
+    textarea.style.height = "auto";
+    textarea.style.height = Math.min(textarea.scrollHeight, 200) + "px";
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto flex flex-col h-[calc(100vh-200px)] min-h-[600px]">
-      {/* Chat Messages Area */}
-      <div className="flex-1 overflow-y-auto space-y-6 mb-6 px-4 scroll-smooth">
+    <div className="flex flex-col h-[calc(100vh-140px)]">
+      {/* Messages Area */}
+      <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full">
-            <div className="text-center space-y-4 animate-fade-in">
-              <div className="w-16 h-16 mx-auto bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl flex items-center justify-center">
-                <Send className="w-8 h-8 text-primary" />
+            <div className="text-center space-y-6 max-w-2xl animate-fade-in">
+              <div className="w-16 h-16 mx-auto bg-muted/50 rounded-2xl flex items-center justify-center">
+                <Sparkles className="w-8 h-8 text-foreground" />
               </div>
               <div>
-                <h3 className="text-xl font-semibold mb-2">Start Creating</h3>
-                <p className="text-muted-foreground max-w-md">
-                  Enter your content idea below and let our AI generate professional scripts, titles, and more.
+                <h3 className="text-2xl font-semibold mb-3 text-foreground">Welcome to NextGen Studio</h3>
+                <p className="text-muted-foreground text-lg mb-6">
+                  Your AI-powered creative assistant for generating professional content ideas, scripts, and more.
                 </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                  <div className="p-4 rounded-xl border border-border bg-card/50">
+                    <div className="font-medium mb-1">📝 Scripts</div>
+                    <div className="text-muted-foreground text-xs">Professional video scripts</div>
+                  </div>
+                  <div className="p-4 rounded-xl border border-border bg-card/50">
+                    <div className="font-medium mb-1">✨ Titles & Tags</div>
+                    <div className="text-muted-foreground text-xs">SEO-optimized content</div>
+                  </div>
+                  <div className="p-4 rounded-xl border border-border bg-card/50">
+                    <div className="font-medium mb-1">🎨 Descriptions</div>
+                    <div className="text-muted-foreground text-xs">Engaging descriptions</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -80,79 +121,101 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
               />
             ))}
             {isLoading && (
-              <div className="flex items-center gap-3 text-muted-foreground animate-pulse">
-                <Loader2 className="w-5 h-5 animate-spin" />
-                <span>NextGen AI is thinking...</span>
+              <div className="flex items-center gap-3 text-muted-foreground">
+                <div className="w-8 h-8 rounded-full bg-muted/50 flex items-center justify-center">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                </div>
+                <span className="text-sm">Generating content...</span>
               </div>
             )}
+            <div ref={messagesEndRef} />
           </>
         )}
       </div>
 
-      {/* Input Area */}
-      <div className="sticky bottom-0 backdrop-blur-xl bg-background/80 border-t border-border/50 pt-4 pb-2">
-        <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Fixed Input Area */}
+      <div className="border-t border-border bg-background/80 backdrop-blur-xl">
+        <div className="container mx-auto max-w-4xl px-4 py-4">
           {/* Options Bar */}
-          <div className="flex gap-3 flex-wrap">
-            <Select value={tone} onValueChange={setTone} disabled={isLoading}>
-              <SelectTrigger className="w-[160px] bg-card/60 border-border/50">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="backdrop-blur-xl bg-popover/95 border-border/50">
-                <SelectItem value="funny">😄 Funny</SelectItem>
-                <SelectItem value="emotional">💙 Emotional</SelectItem>
-                <SelectItem value="cinematic">🎬 Cinematic</SelectItem>
-                <SelectItem value="motivational">💪 Motivational</SelectItem>
-                <SelectItem value="educational">📚 Educational</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className={cn(
+            "mb-3 transition-all duration-300 overflow-hidden",
+            showOptions ? "max-h-20 opacity-100" : "max-h-0 opacity-0"
+          )}>
+            <div className="flex gap-2 flex-wrap pb-3">
+              <Select value={tone} onValueChange={setTone} disabled={isLoading}>
+                <SelectTrigger className="w-[140px] h-9 text-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="funny">😄 Funny</SelectItem>
+                  <SelectItem value="emotional">💙 Emotional</SelectItem>
+                  <SelectItem value="cinematic">🎬 Cinematic</SelectItem>
+                  <SelectItem value="motivational">💪 Motivational</SelectItem>
+                  <SelectItem value="educational">📚 Educational</SelectItem>
+                </SelectContent>
+              </Select>
 
-            <Select value={platform} onValueChange={setPlatform} disabled={isLoading}>
-              <SelectTrigger className="w-[160px] bg-card/60 border-border/50">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="backdrop-blur-xl bg-popover/95 border-border/50">
-                <SelectItem value="YouTube">📺 YouTube</SelectItem>
-                <SelectItem value="Shorts">🎥 Shorts</SelectItem>
-                <SelectItem value="Instagram">📸 Instagram</SelectItem>
-                <SelectItem value="TikTok">🎵 TikTok</SelectItem>
-              </SelectContent>
-            </Select>
+              <Select value={platform} onValueChange={setPlatform} disabled={isLoading}>
+                <SelectTrigger className="w-[140px] h-9 text-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="YouTube">📺 YouTube</SelectItem>
+                  <SelectItem value="Shorts">🎥 Shorts</SelectItem>
+                  <SelectItem value="Instagram">📸 Instagram</SelectItem>
+                  <SelectItem value="TikTok">🎵 TikTok</SelectItem>
+                </SelectContent>
+              </Select>
 
-            {messages.length > 0 && (
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={handleReset}
-                className="ml-auto"
-              >
-                <RotateCcw className="w-4 h-4 mr-2" />
-                New Chat
-              </Button>
-            )}
+              {messages.length > 0 && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleReset}
+                  className="h-9 ml-auto"
+                >
+                  <RotateCcw className="w-3.5 h-3.5 mr-1.5" />
+                  New Chat
+                </Button>
+              )}
+            </div>
           </div>
 
-          {/* Input Box */}
-          <div className="flex gap-2">
-            <Textarea
-              value={theme}
-              onChange={(e) => setTheme(e.target.value)}
-              placeholder="Describe your content idea... (e.g., Minecraft funny short, tech review)"
-              className="min-h-[56px] max-h-[200px] bg-card/60 border-border/50 focus:border-primary/50 transition-all resize-none"
-              disabled={isLoading}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSubmit(e);
-                }
-              }}
-            />
+          {/* Input Form */}
+          <form onSubmit={handleSubmit} className="flex gap-2 items-end">
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowOptions(!showOptions)}
+              className="shrink-0 mb-1"
+            >
+              <Settings2 className="w-5 h-5" />
+            </Button>
+
+            <div className="flex-1 relative">
+              <Textarea
+                ref={textareaRef}
+                value={theme}
+                onChange={handleTextareaChange}
+                placeholder="Describe your content idea..."
+                className="min-h-[48px] max-h-[200px] resize-none pr-12 py-3"
+                disabled={isLoading}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSubmit(e);
+                  }
+                }}
+              />
+            </div>
+
             <Button
               type="submit"
               disabled={isLoading || !theme.trim()}
               size="icon"
-              className="h-[56px] w-[56px] shrink-0 bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-all"
+              className="shrink-0 h-[48px] w-[48px] rounded-xl"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -160,12 +223,12 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
                 <Send className="w-5 h-5" />
               )}
             </Button>
-          </div>
+          </form>
 
-          <p className="text-xs text-muted-foreground text-center">
-            Press Enter to send, Shift + Enter for new line
+          <p className="text-xs text-muted-foreground text-center mt-2">
+            Press Enter to send • Shift + Enter for new line
           </p>
-        </form>
+        </div>
       </div>
     </div>
   );
