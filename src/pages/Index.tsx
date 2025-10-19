@@ -2,9 +2,12 @@ import { useState } from "react";
 import { toast } from "sonner";
 import Header from "@/components/Header";
 import ChatInterface from "@/components/ChatInterface";
+import CookieConsent from "@/components/CookieConsent";
+import UsernameModal from "@/components/UsernameModal";
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [username, setUsername] = useState<string>("");
 
   const handleGenerate = async (theme: string, tone: string, platform: string): Promise<string> => {
     setIsLoading(true);
@@ -89,15 +92,17 @@ ${data.thumbnailIdea}
 
   return (
     <div className="min-h-screen flex flex-col animated-bg">
-      <Header />
+      <UsernameModal onUsernameSet={setUsername} />
+      <CookieConsent />
+      <Header username={username} />
       
       <main className="flex-1 container mx-auto max-w-7xl">
         <ChatInterface onGenerate={handleGenerate} isLoading={isLoading} />
       </main>
 
-      <footer className="py-3 px-4 border-t border-border bg-background/50 backdrop-blur-xl">
+      <footer className="py-2 md:py-3 px-3 md:px-4 border-t border-border bg-background/50 backdrop-blur-xl">
         <div className="container mx-auto max-w-7xl text-center">
-          <p className="text-xs text-muted-foreground">
+          <p className="text-[10px] md:text-xs text-muted-foreground">
             © 2025 Nextup Studio — Created by Vanshu
           </p>
         </div>

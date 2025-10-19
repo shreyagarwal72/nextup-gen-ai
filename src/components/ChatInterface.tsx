@@ -80,9 +80,9 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-140px)]">
+    <div className="flex flex-col h-[calc(100vh-80px)] md:h-[calc(100vh-140px)]">
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
+      <div className="flex-1 overflow-y-auto px-3 md:px-4 py-4 md:py-6 space-y-4 md:space-y-6">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center space-y-6 max-w-2xl animate-fade-in">
@@ -135,15 +135,15 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
 
       {/* Fixed Input Area */}
       <div className="border-t border-border bg-background/80 backdrop-blur-xl">
-        <div className="container mx-auto max-w-4xl px-4 py-4">
+        <div className="container mx-auto max-w-4xl px-3 md:px-4 py-3 md:py-4">
           {/* Options Bar */}
           <div className={cn(
-            "mb-3 transition-all duration-300 overflow-hidden",
-            showOptions ? "max-h-20 opacity-100" : "max-h-0 opacity-0"
+            "mb-2 md:mb-3 transition-all duration-300 overflow-hidden",
+            showOptions ? "max-h-24 md:max-h-20 opacity-100" : "max-h-0 opacity-0"
           )}>
-            <div className="flex gap-2 flex-wrap pb-3">
+            <div className="flex gap-2 flex-wrap pb-2 md:pb-3">
               <Select value={tone} onValueChange={setTone} disabled={isLoading}>
-                <SelectTrigger className="w-[140px] h-9 text-sm">
+                <SelectTrigger className="w-[130px] md:w-[140px] h-8 md:h-9 text-xs md:text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -152,11 +152,16 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
                   <SelectItem value="cinematic">🎬 Cinematic</SelectItem>
                   <SelectItem value="motivational">💪 Motivational</SelectItem>
                   <SelectItem value="educational">📚 Educational</SelectItem>
+                  <SelectItem value="professional">💼 Professional</SelectItem>
+                  <SelectItem value="casual">😎 Casual</SelectItem>
+                  <SelectItem value="dramatic">🎭 Dramatic</SelectItem>
+                  <SelectItem value="inspirational">✨ Inspirational</SelectItem>
+                  <SelectItem value="informative">ℹ️ Informative</SelectItem>
                 </SelectContent>
               </Select>
 
               <Select value={platform} onValueChange={setPlatform} disabled={isLoading}>
-                <SelectTrigger className="w-[140px] h-9 text-sm">
+                <SelectTrigger className="w-[130px] md:w-[140px] h-8 md:h-9 text-xs md:text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -164,6 +169,11 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
                   <SelectItem value="Shorts">🎥 Shorts</SelectItem>
                   <SelectItem value="Instagram">📸 Instagram</SelectItem>
                   <SelectItem value="TikTok">🎵 TikTok</SelectItem>
+                  <SelectItem value="Facebook">👥 Facebook</SelectItem>
+                  <SelectItem value="Twitter">🐦 Twitter/X</SelectItem>
+                  <SelectItem value="LinkedIn">💼 LinkedIn</SelectItem>
+                  <SelectItem value="Pinterest">📌 Pinterest</SelectItem>
+                  <SelectItem value="Blog">📝 Blog</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -173,25 +183,26 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
                   variant="outline"
                   size="sm"
                   onClick={handleReset}
-                  className="h-9 ml-auto"
+                  className="h-8 md:h-9 ml-auto text-xs md:text-sm"
                 >
-                  <RotateCcw className="w-3.5 h-3.5 mr-1.5" />
-                  New Chat
+                  <RotateCcw className="w-3 md:w-3.5 h-3 md:h-3.5 mr-1 md:mr-1.5" />
+                  <span className="hidden sm:inline">New Chat</span>
+                  <span className="sm:hidden">New</span>
                 </Button>
               )}
             </div>
           </div>
 
           {/* Input Form */}
-          <form onSubmit={handleSubmit} className="flex gap-2 items-end">
+          <form onSubmit={handleSubmit} className="flex gap-1.5 md:gap-2 items-end">
             <Button
               type="button"
               variant="ghost"
               size="icon"
               onClick={() => setShowOptions(!showOptions)}
-              className="shrink-0 mb-1"
+              className="shrink-0 mb-1 h-9 w-9 md:h-10 md:w-10"
             >
-              <Settings2 className="w-5 h-5" />
+              <Settings2 className="w-4 md:w-5 h-4 md:h-5" />
             </Button>
 
             <div className="flex-1 relative">
@@ -200,7 +211,7 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
                 value={theme}
                 onChange={handleTextareaChange}
                 placeholder="Describe your content idea..."
-                className="min-h-[48px] max-h-[200px] resize-none pr-12 py-3"
+                className="min-h-[44px] md:min-h-[48px] max-h-[200px] resize-none pr-12 py-2.5 md:py-3 text-sm md:text-base"
                 disabled={isLoading}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
@@ -215,18 +226,19 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
               type="submit"
               disabled={isLoading || !theme.trim()}
               size="icon"
-              className="shrink-0 h-[48px] w-[48px] rounded-xl"
+              className="shrink-0 h-[44px] w-[44px] md:h-[48px] md:w-[48px] rounded-xl"
             >
               {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
+                <Loader2 className="w-4 md:w-5 h-4 md:h-5 animate-spin" />
               ) : (
-                <Send className="w-5 h-5" />
+                <Send className="w-4 md:w-5 h-4 md:h-5" />
               )}
             </Button>
           </form>
 
-          <p className="text-xs text-muted-foreground text-center mt-2">
-            Press Enter to send • Shift + Enter for new line
+          <p className="text-[10px] md:text-xs text-muted-foreground text-center mt-1.5 md:mt-2">
+            <span className="hidden sm:inline">Press Enter to send • Shift + Enter for new line</span>
+            <span className="sm:hidden">Enter to send • Shift+Enter for new line</span>
           </p>
         </div>
       </div>
