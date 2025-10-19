@@ -1,73 +1,125 @@
-# Welcome to your Lovable project
+# NextGen Studio Tools
 
-## Project info
+> AI-Powered Creative Studio for Content Creators
 
-**URL**: https://lovable.dev/projects/144798d5-a7b7-4feb-9424-f8365948501c
+## 🌟 Overview
 
-## How can I edit this code?
+**NextGen Studio Tools** is a professional, futuristic web application that helps content creators, YouTubers, and artists generate creative ideas, scripts, titles, and tags instantly using Google Gemini AI.
 
-There are several ways of editing your application.
+Built by **Vanshu** (Developer) as part of **Nextup Studio**.
 
-**Use Lovable**
+## ✨ Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/144798d5-a7b7-4feb-9424-f8365948501c) and start prompting.
+- **AI-Powered Content Generation**: Leverages Google Gemini AI to create:
+  - Video scripts (short-form and long-form)
+  - Catchy titles and descriptions
+  - SEO-optimized tags and hashtags
+  - Thumbnail caption ideas
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Customization Options**:
+  - Choose content tone (funny, emotional, cinematic, motivational, educational)
+  - Select platform (YouTube, Shorts, Instagram, TikTok)
 
-**Use your preferred IDE**
+- **User-Friendly Features**:
+  - One-click copy to clipboard
+  - Save ideas to local storage
+  - Beautiful iOS-inspired interface
+  - Fully responsive and mobile-friendly
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🎨 Design
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- **Modern UI**: iOS-inspired design with glassmorphism and blur effects
+- **Color Scheme**: Electric teal (#00bcd4) accents on deep space dark background
+- **Animations**: Smooth transitions, fade-ins, and loading states
+- **Typography**: Clean, professional hierarchy
 
-Follow these steps:
+## 🚀 Usage
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+1. **Enter Your Idea**: Describe your content concept (e.g., "Minecraft funny short")
+2. **Choose Options**: Select tone and target platform
+3. **Generate**: Click "Generate Ideas" and let AI create your content
+4. **Copy & Save**: Use copy buttons for each section or save to local storage
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 🛠️ Tech Stack
 
-# Step 3: Install the necessary dependencies.
-npm i
+- **Frontend**: React, TypeScript, Vite
+- **Styling**: Tailwind CSS with custom design tokens
+- **UI Components**: shadcn/ui
+- **Backend**: Lovable Cloud (Supabase)
+- **AI**: Google Gemini 2.5 Flash via Lovable AI Gateway
+- **Storage**: Local Storage for saved ideas
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+## 📦 Setup
+
+This project is built with Lovable and uses Lovable Cloud for backend services.
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
+
+# Build for production
+npm run build
 ```
 
-**Edit a file directly in GitHub**
+## 🔑 Environment Variables
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Environment variables are automatically configured via Lovable Cloud:
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
 
-**Use GitHub Codespaces**
+The AI API key (`LOVABLE_API_KEY`) is pre-configured in the backend.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 📝 Project Structure
 
-## What technologies are used for this project?
+```
+src/
+├── components/
+│   ├── Header.tsx              # App header with branding
+│   ├── GeneratorForm.tsx       # Input form with options
+│   ├── ResultsDisplay.tsx      # Display generated content
+│   └── AboutSection.tsx        # About and creator info
+├── pages/
+│   └── Index.tsx               # Main application page
+└── index.css                   # Design system & tokens
 
-This project is built with:
+supabase/
+└── functions/
+    └── generate-content/       # AI content generation endpoint
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 🌐 SEO Optimization
 
-## How can I deploy this project?
+- Semantic HTML structure
+- Optimized meta tags and descriptions
+- Custom favicon
+- Fast loading with lazy loading
+- Mobile-first responsive design
 
-Simply open [Lovable](https://lovable.dev/projects/144798d5-a7b7-4feb-9424-f8365948501c) and click on Share -> Publish.
+## 💡 Future Enhancements
 
-## Can I connect a custom domain to my Lovable project?
+- User accounts and cloud storage
+- Content history and analytics
+- Batch generation
+- Export to various formats
+- Team collaboration features
 
-Yes, you can!
+## 📄 License
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+© 2025 Nextup Studio — Powered by Gemini AI
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+---
+
+## 👨‍💻 About the Creator
+
+**Nextgen AI** was created by **Vanshu**, a developer passionate about empowering content creators with AI-powered tools.
+
+For questions or support, please reach out through the application.
+
+## 🙏 Acknowledgments
+
+- Built with [Lovable](https://lovable.dev)
+- Powered by Google Gemini AI
+- UI components from [shadcn/ui](https://ui.shadcn.com)
