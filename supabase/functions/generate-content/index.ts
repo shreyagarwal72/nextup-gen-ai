@@ -52,7 +52,7 @@ FLEXIBILITY:
 
     const userPrompt = `Generate content for:
 Theme/Idea: ${theme}
-Tone: ${tone}
+Tone: ${tone === "auto" ? "Choose the most appropriate tone based on the content theme and type" : tone}
 Content Type: ${contentType}
 
 ${contentType !== "all" ? `Focus on generating an exceptional ${contentType} that stands out. Make it professional, engaging, and optimized.` : "Provide complete, ready-to-use content with all elements."}`;

@@ -20,7 +20,7 @@ interface ChatInterfaceProps {
 const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [theme, setTheme] = useState("");
-  const [tone, setTone] = useState("funny");
+  const [tone, setTone] = useState("auto");
   const [contentType, setContentType] = useState("all");
   const [showOptions, setShowOptions] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -147,6 +147,7 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="auto">🤖 Auto</SelectItem>
                   <SelectItem value="funny">😄 Funny</SelectItem>
                   <SelectItem value="emotional">💙 Emotional</SelectItem>
                   <SelectItem value="cinematic">🎬 Cinematic</SelectItem>
