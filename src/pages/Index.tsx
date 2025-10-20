@@ -49,50 +49,50 @@ const Index = () => {
         formattedResponse = `
 ## 📝 Script
 
-${data.script}
+${data.script || 'N/A'}
 
 ---
 
 ## ✨ Title
 
-**${data.title}**
+**${data.title || 'N/A'}**
 
 ---
 
 ## 📄 Description
 
-${data.description}
+${data.description || 'N/A'}
 
 ---
 
 ## 🏷️ Tags
 
-${data.tags.map((tag: string) => `\`${tag}\``).join(", ")}
+${Array.isArray(data.tags) ? data.tags.map((tag: string) => `\`${tag}\``).join(", ") : 'N/A'}
 
 ---
 
 ## #️⃣ Hashtags
 
-${data.hashtags.join(" ")}
+${Array.isArray(data.hashtags) ? data.hashtags.join(" ") : 'N/A'}
 
 ---
 
 ## 🖼️ Thumbnail Idea
 
-${data.thumbnailIdea}
+${data.thumbnailIdea || 'N/A'}
 `;
       } else if (contentType === "title") {
-        formattedResponse = `## ✨ Title\n\n**${data.title}**`;
+        formattedResponse = `## ✨ Title\n\n**${data.title || 'N/A'}**`;
       } else if (contentType === "description") {
-        formattedResponse = `## 📄 Description\n\n${data.description}`;
+        formattedResponse = `## 📄 Description\n\n${data.description || 'N/A'}`;
       } else if (contentType === "tags") {
-        formattedResponse = `## 🏷️ Tags\n\n${data.tags.map((tag: string) => `\`${tag}\``).join(", ")}`;
+        formattedResponse = `## 🏷️ Tags\n\n${Array.isArray(data.tags) ? data.tags.map((tag: string) => `\`${tag}\``).join(", ") : 'N/A'}`;
       } else if (contentType === "hashtags") {
-        formattedResponse = `## #️⃣ Hashtags\n\n${data.hashtags.join(" ")}`;
+        formattedResponse = `## #️⃣ Hashtags\n\n${Array.isArray(data.hashtags) ? data.hashtags.join(" ") : 'N/A'}`;
       } else if (contentType === "thumbnail") {
-        formattedResponse = `## 🖼️ Thumbnail Idea\n\n${data.thumbnailIdea}`;
+        formattedResponse = `## 🖼️ Thumbnail Idea\n\n${data.thumbnailIdea || 'N/A'}`;
       } else if (contentType === "script") {
-        formattedResponse = `## 📝 Script\n\n${data.script}`;
+        formattedResponse = `## 📝 Script\n\n${data.script || 'N/A'}`;
       }
       
       toast.success("Content generated successfully!");

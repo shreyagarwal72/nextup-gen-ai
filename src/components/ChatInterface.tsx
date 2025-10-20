@@ -18,17 +18,44 @@ interface ChatInterfaceProps {
 }
 
 const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(() => {
+    const saved = localStorage.getItem('chat-messages');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return parsed.map((m: any) => ({ ...m, timestamp: new Date(m.timestamp) }));
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  });
   const [theme, setTheme] = useState("");
   const [tone, setTone] = useState("auto");
   const [contentType, setContentType] = useState("all");
   const [showOptions, setShowOptions] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const presets = [
+    "How-to Tutorial",
+    "Product Review", 
+    "Motivational Short",
+    "Breaking News"
+  ];
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
   };
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      const toSave = messages.slice(-50);
+      localStorage.setItem('chat-messages', JSON.stringify(toSave));
+    }
+  }, [messages]);
 
   useEffect(() => {
     scrollToBottom();
@@ -68,6 +95,7 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
     setMessages([]);
     setTheme("");
     setShowOptions(false);
+    localStorage.removeItem('chat-messages');
   };
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -134,8 +162,23 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
       </div>
 
       {/* Fixed Input Area */}
-      <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-background/95 backdrop-blur-xl z-50">
+      <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-background/95 backdrop-blur-xl z-50 pb-[max(12px,env(safe-area-inset-bottom))]">
         <div className="container mx-auto max-w-4xl px-3 md:px-4 py-3 md:py-4">
+          {/* Quick Presets */}
+          {messages.length === 0 && (
+            <div className="flex gap-2 mb-3 overflow-x-auto pb-2 scrollbar-hide">
+              {presets.map((preset) => (
+                <button
+                  key={preset}
+                  onClick={() => setTheme(preset)}
+                  className="px-3 py-1.5 text-xs md:text-sm bg-primary/10 hover:bg-primary/20 text-primary rounded-full whitespace-nowrap transition-colors min-h-[44px] md:min-h-0"
+                  disabled={isLoading}
+                >
+                  {preset}
+                </button>
+              ))}
+            </div>
+          )}
           {/* Options Bar */}
           <div className={cn(
             "mb-2 md:mb-3 transition-all duration-300 overflow-hidden",
@@ -146,8 +189,8 @@ const ChatInterface = ({ onGenerate, isLoading }: ChatInterfaceProps) => {
                 <SelectTrigger className="w-[130px] md:w-[140px] h-8 md:h-9 text-xs md:text-sm">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="auto">🤖 Auto</SelectItem>
+                  <SelectContent>
+                  <SelectItem value="auto">🧠 Custom (AI decides)</SelectItem>
                   <SelectItem value="funny">😄 Funny</SelectItem>
                   <SelectItem value="emotional">💙 Emotional</SelectItem>
                   <SelectItem value="cinematic">🎬 Cinematic</SelectItem>
